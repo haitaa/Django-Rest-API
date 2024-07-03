@@ -11,13 +11,12 @@ class ProductInlineSerializer(serializers.Serializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(source='user', read_only=True)
-    edit_url = serializers.SerializerMethodField(read_only=True)
-    url = serializers.HyperlinkedIdentityField(view_name="product-detail", lookup_field="pk")
     title = serializers.CharField(validators=[validate_title_no_hello, unique_product_title])
+    body = serializers.CharField(source='content')
     #email = serializers.CharField(source='user.email', read_only=True)
     class Meta:
         model = Product
-        fields = ['owner', 'url', 'edit_url', 'pk', "title", "content", "price", "sale_price", 'public']
+        fields = ['owner', 'pk', "title", "body", "price", "sale_price", 'public', 'path', 'endpoint']
 
     def get_my_user_data(self, obj):
         return {
