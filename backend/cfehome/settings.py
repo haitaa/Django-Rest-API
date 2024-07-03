@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import datetime
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     # third party packages
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
 
     # internal apps
     'api',
@@ -135,8 +137,14 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES" : ["rest_framework.authentication.SessionAuthentication", "api.authentication.TokenAuthentication"],
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        "rest_framework.authentication.SessionAuthentication", 
+        "api.authentication.TokenAuthentication", 
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly"
+    ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10
 }
@@ -145,4 +153,10 @@ ALGOLIA = {
     'APPLICATION_ID': '16HJE7UZND',
     'API_KEY': 'c5066650a4fbb028b37dacbe4761e9d8',
     'INDEX_PREFIX': 'crf'
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ["Bearer"],
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=30),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=1),
 }
